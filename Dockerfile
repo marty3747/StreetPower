@@ -1,12 +1,9 @@
 FROM nginx:alpine
 
-# Копируем статические файлы в директорию Nginx
-COPY ./index.html /usr/share/nginx/html/index.html
-COPY ./script.js /usr/share/nginx/html/script.js
-COPY ./styles.css /usr/share/nginx/html/styles.css
-COPY ./images /usr/share/nginx/html/images
+# Копируем все файлы приложения
+COPY . /usr/share/nginx/html
 
-# Копируем конфигурацию Nginx, если она есть
+# Копируем конфигурацию Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
