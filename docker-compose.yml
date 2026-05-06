@@ -1,0 +1,13 @@
+# To run production: docker-compose up --build -d
+version: "3.4"
+services:
+  streetpower_docker:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 6666:80
+      # - 443:443
+    # volumes:
+      # - /certs/streetpower:/certs
