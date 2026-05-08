@@ -167,7 +167,7 @@ body > * {
     height: calc(100vh - 80px);
     position: relative;
     display: flex;
-    align-items: center;
+    padding: 20px;
     justify-content: center;
     background: var(--ink);
     color: var(--paper);
@@ -203,7 +203,7 @@ body > * {
     background: rgba(16,16,16,0.65);
     color: var(--paper);
     letter-spacing: 2.4px;
-    font-size: 0.9rem;
+    font-size: 1.9rem;
     margin-bottom: 1rem;
     border: 1px solid var(--line);
     box-shadow: 0 0 0 3px rgba(0,0,0,0.55) inset;
