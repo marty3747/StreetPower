@@ -41,6 +41,7 @@ body {
 .registration-form a:hover { color: var(--paper); }
 
 .container {
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
@@ -74,8 +75,16 @@ body > * {
     z-index: 1;
 }
 
+.header-phantom {
+    height: 80px;
+    width: 100%;
+}
+
 /* Header */
 .header {
+    height: 80px;
+    display: flex;
+    align-items: center;
     position: fixed;
     top: 0;
     width: 100%;
@@ -87,11 +96,13 @@ body > * {
 }
 
 .nav {
+    width: 100%;
     padding: 1rem 0;
 }
 
 .nav .container {
     display: flex;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
 }
@@ -153,7 +164,7 @@ body > * {
 
 /* Hero Section */
 .hero {
-    height: 100vh;
+    height: calc(100vh - 80px);
     position: relative;
     display: flex;
     align-items: center;
@@ -375,7 +386,7 @@ body > * {
 /* About Section */
 .about-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     margin-bottom: 4rem;
 }
@@ -419,7 +430,7 @@ body > * {
 
 .goals-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     max-width: 1000px;
     margin: 0 auto;
@@ -468,7 +479,7 @@ body > * {
 
 .groups-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
 }
 
@@ -516,7 +527,7 @@ body > * {
 
 .disciplines-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     margin-bottom: 4rem;
 }
@@ -569,7 +580,7 @@ body > * {
 
 .rules-details {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
 }
 
@@ -602,7 +613,7 @@ body > * {
 /* Awards Section */
 .awards-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
 }
 
@@ -635,7 +646,7 @@ body > * {
 /* Event Info */
 .event-info-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
 }
 
@@ -1035,8 +1046,10 @@ body > * {
     .rules-content h3 { text-align: center; }
     
     .about-grid,
+    .goals-grid,
     .groups-grid,
-    .disciplines-grid {
+    .disciplines-grid,
+    .event-info-grid {
         grid-template-columns: 1fr;
     }
     
