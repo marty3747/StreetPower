@@ -193,7 +193,6 @@ body > * {
 .hero-content {
     position: relative;
     z-index: 2;
-    max-width: 800px;
     padding: 0 20px;
 }
 
@@ -259,14 +258,32 @@ body > * {
 }
 
 .discipline {
-    background: rgba(138, 31, 27, 0.22);
-    padding: 0.5rem 1rem;
-    border-radius: 999px;
-    font-weight: 600;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(138,31,27,0.45);
-    font-family: var(--font-mono);
-    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    height: 80px;
+    background: rgba(0,0,0,0.65);
+    padding: 1.2rem 1.5rem;
+    font-size: 1.35rem;
+    text-transform: uppercase;
+    border: 2px solid rgba(233,233,233,0.25);
+    box-shadow: 8px 8px 0 rgba(0,0,0,0.9);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.discipline:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0 rgba(0,0,0,0.9);
+}
+
+.discipline:before {
+    content: "";
+    height: calc(80px - 4px);
+    width: 15px;
+    background: var(--accent-2);
+    margin-top: -1.2rem;
+    margin-right: 1.5rem;
+    margin-bottom: -1.2rem;
+    margin-left: -1.5rem;
 }
 
 .hero-date {
