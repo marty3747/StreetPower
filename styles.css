@@ -164,7 +164,7 @@ body > * {
 
 /* Hero Section */
 .hero {
-    height: calc(100vh - 80px);
+    height: 100vh;
     position: relative;
     display: flex;
     padding: 20px;
@@ -840,7 +840,6 @@ body > * {
     display: block;
     object-fit: contain;
     border-radius: var(--radius);
-    filter: grayscale(1) contrast(1.15);
 }
 
 .partner-placeholder i {
