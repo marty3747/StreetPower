@@ -1,10 +1,10 @@
 // Mobile Navigation Toggle
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const navToggle = document.querySelector('.nav-toggle');
     const navLinks = document.querySelector('.nav-links');
-    
+
     if (navToggle && navLinks) {
-        navToggle.addEventListener('click', function() {
+        navToggle.addEventListener('click', function () {
             navLinks.classList.toggle('active');
             navToggle.classList.toggle('active');
         });
@@ -13,21 +13,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // Smooth scrolling for navigation links
     const links = document.querySelectorAll('a[href^="#"]');
     links.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             const targetSection = document.querySelector(targetId);
-            
+
             if (targetSection) {
                 const headerHeight = document.querySelector('.header').offsetHeight;
                 const targetPosition = targetSection.offsetTop - headerHeight;
-                
+
                 window.scrollTo({
                     top: targetPosition,
                     behavior: 'smooth'
                 });
             }
-            
+
             // Close mobile menu if open
             if (navLinks.classList.contains('active')) {
                 navLinks.classList.remove('active');
@@ -39,40 +39,40 @@ document.addEventListener('DOMContentLoaded', function() {
     // Registration form submission
     const registrationForm = document.querySelector('.registration-form');
     if (registrationForm) {
-        registrationForm.addEventListener('submit', async function(e) {
+        registrationForm.addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             // Get form data
             const formData = new FormData(this);
-            
+
             // Basic validation
             const surname = formData.get('surname');
             const name = formData.get('name');
             const age = formData.get('age');
             const telegram = formData.get('telegram');
             const privacy = formData.get('privacy');
-            
+
             if (!surname || !name || !age || !telegram) {
                 alert('Пожалуйста, заполните все обязательные поля');
                 return;
             }
-            
+
             if (!privacy) {
                 alert('Необходимо согласие на обработку персональных данных');
                 return;
             }
-            
+
             if (age < 15) {
                 alert('Минимальный возраст для участия - 15 лет');
                 return;
             }
-            
+
             // Show loading state
             const submitButton = this.querySelector('.submit-button');
             const originalText = submitButton.textContent;
             submitButton.textContent = 'Отправка...';
             submitButton.disabled = true;
-            
+
             try {
                 // Отправляем данные в Google Sheets через GET запрос
                 const params = new URLSearchParams({
@@ -82,17 +82,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     age: age,
                     telegram: telegram
                 });
-                
+
                 const response = await fetch(`https://script.google.com/macros/s/AKfycbxfIh2RT08CpjQF9bygcVwqWm-ShLERB9PYSDI03mB-vLJvvNkf8Cg45KwalkgpZ7ZE/exec?${params}`, {
                     method: 'GET',
                     mode: 'no-cors'
                 });
-                
+
                 // При использовании no-cors мы не можем прочитать ответ
                 // Но если запрос выполнился без ошибки, считаем успешным
                 alert('Спасибо за регистрацию! Мы свяжемся с вами в ближайшее время.');
                 this.reset();
-                
+
             } catch (error) {
                 alert('Произошла ошибка при отправке формы. Проверьте подключение к интернету и попробуйте еще раз.');
                 console.error('Ошибка:', error);
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Header background on scroll
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         const header = document.querySelector('.header');
         if (window.scrollY > 100) {
             header.style.background = 'rgba(16, 16, 16, 0.92)';
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rootMargin: '0px 0px -50px 0px'
     };
 
-    const observer = new IntersectionObserver(function(entries) {
+    const observer = new IntersectionObserver(function (entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.style.opacity = '1';
@@ -153,35 +153,35 @@ document.addEventListener('DOMContentLoaded', function() {
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const indicators = document.querySelectorAll('.indicator');
-    
+
     if (carouselTrack && prevBtn && nextBtn) {
         let currentSlide = 0;
         const totalSlides = carouselTrack.children.length;
-        
+
         function updateCarousel() {
             const translateX = -currentSlide * 100;
             carouselTrack.style.transform = `translateX(${translateX}%)`;
-            
+
             // Update indicators
             indicators.forEach((indicator, index) => {
                 indicator.classList.toggle('active', index === currentSlide);
             });
         }
-        
+
         function nextSlide() {
             currentSlide = (currentSlide + 1) % totalSlides;
             updateCarousel();
         }
-        
+
         function prevSlide() {
             currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
             updateCarousel();
         }
-        
+
         // Event listeners
         nextBtn.addEventListener('click', nextSlide);
         prevBtn.addEventListener('click', prevSlide);
-        
+
         indicators.forEach((indicator, index) => {
             indicator.addEventListener('click', () => {
                 currentSlide = index;
@@ -192,18 +192,18 @@ document.addEventListener('DOMContentLoaded', function() {
         // Touch events for mobile swipe
         let startX = 0;
         let isDragging = false;
-        
+
         carouselTrack.addEventListener('touchstart', (e) => {
             startX = e.touches[0].clientX;
             isDragging = true;
             // Optional: stop auto-play when user interacts
         }, { passive: true });
-        
+
         carouselTrack.addEventListener('touchmove', (e) => {
             if (!isDragging) return;
             const currentX = e.touches[0].clientX;
             const diff = startX - currentX;
-            
+
             // Если свайп достаточно длинный (например, > 50px), переключаем слайд
             if (Math.abs(diff) > 50) {
                 if (diff > 0) {
@@ -214,11 +214,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 isDragging = false; // Отключаем дальнейшее срабатывание до нового touchstart
             }
         }, { passive: true });
-        
+
         carouselTrack.addEventListener('touchend', () => {
             isDragging = false;
         });
-        
+
         // Auto-play (optional)
         setInterval(nextSlide, 5000);
     }
