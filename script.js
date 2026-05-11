@@ -188,6 +188,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateCarousel();
             });
         });
+
+        // Touch events for mobile swipe
+        let startX = 0;
+        let isDragging = false;
+        
+        carouselTrack.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+            // Optional: stop auto-play when user interacts
+        }, { passive: true });
+        
+        carouselTrack.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const currentX = e.touches[0].clientX;
+            const diff = startX - currentX;
+            
+            // Если свайп достаточно длинный (например, > 50px), переключаем слайд
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+                isDragging = false; // Отключаем дальнейшее срабатывание до нового touchstart
+            }
+        }, { passive: true });
+        
+        carouselTrack.addEventListener('touchend', () => {
+            isDragging = false;
+        });
         
         // Auto-play (optional)
         setInterval(nextSlide, 5000);
