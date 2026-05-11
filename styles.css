@@ -1133,7 +1133,15 @@ body > * {
     }
     
     .hero-title {
-        font-size: 3.4rem;
+        font-size: 50px;
+    }
+
+    .hero-title-sila {
+        font-size: 50px !important;
+    }
+    
+    .desktop-br {
+        display: none;
     }
     
     .hero-subtitle {
