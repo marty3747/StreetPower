@@ -94,6 +94,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('registration-form').style.display = 'none';
                 document.getElementById('registration-success').style.display = 'block';
 
+                // Скролл к секции регистрации после успеха
+                const regSection = document.getElementById('registration');
+                if (regSection) {
+                    const headerHeight = document.querySelector('.header') ? document.querySelector('.header').offsetHeight : 0;
+                    window.scrollTo({
+                        top: regSection.offsetTop - headerHeight,
+                        behavior: 'smooth'
+                    });
+                }
+
             } catch (error) {
                 alert('Произошла ошибка при отправке формы. Проверьте подключение к интернету и попробуйте еще раз.');
                 console.error('Ошибка:', error);
