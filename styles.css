@@ -171,7 +171,7 @@ body > * {
 
 /* Hero Section */
 .hero {
-    height: 100vh;
+    min-height: 100vh;
     position: relative;
     display: flex;
     padding: 20px;
