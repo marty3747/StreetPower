@@ -223,5 +223,32 @@ document.addEventListener('DOMContentLoaded', function () {
         // Auto-play (optional)
         setInterval(nextSlide, 5000);
     }
+
+    // Audio Player Functionality
+    const audioToggleBtn = document.getElementById('audio-toggle-btn');
+    const bgAudio = document.getElementById('bg-audio');
+    let isPlaying = false;
+
+    if (audioToggleBtn && bgAudio) {
+        audioToggleBtn.addEventListener('click', function () {
+            if (isPlaying) {
+                bgAudio.pause();
+                audioToggleBtn.classList.remove('playing');
+                // Optional: change icon back to play state
+                audioToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
+            } else {
+                bgAudio.play().catch(error => {
+                    console.log('Автовоспроизведение было заблокировано браузером', error);
+                });
+                audioToggleBtn.classList.add('playing');
+                // Change icon to pause or active music state
+                audioToggleBtn.innerHTML = '<i class="fas fa-music"></i>';
+            }
+            isPlaying = !isPlaying;
+        });
+        
+        // Initial icon state
+        audioToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
 });
 
