@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             isPlaying = !isPlaying;
         });
-        
+
         // Initial icon state
         audioToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
     }
