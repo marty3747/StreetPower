@@ -90,9 +90,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // При использовании no-cors мы не можем прочитать ответ
                 // Но если запрос выполнился без ошибки, считаем успешным
-                alert('Спасибо за регистрацию! Мы свяжемся с вами в ближайшее время.');
-                window.open('https://t.me/+nnMWuDRMlLwxZWZi', '_blank');
-                this.reset();
+                document.getElementById('registration-title').style.display = 'none';
+                document.getElementById('registration-form').style.display = 'none';
+                document.getElementById('registration-success').style.display = 'block';
 
             } catch (error) {
                 alert('Произошла ошибка при отправке формы. Проверьте подключение к интернету и попробуйте еще раз.');
