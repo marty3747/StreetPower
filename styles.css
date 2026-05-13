@@ -117,6 +117,7 @@ body > * {
 }
 
 .nav-logo {
+    transform: translateY(4px);
     width: 170px;
     object-fit: contain;
     max-width: 100%;
@@ -1256,7 +1257,7 @@ body > * {
     }
 
     .main-logo {
-        width: 200px;
+        width: 300px;
     }
 
     .section {
