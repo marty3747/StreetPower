@@ -227,10 +227,24 @@ document.addEventListener('DOMContentLoaded', function () {
     // Audio Player Functionality
     const audioToggleBtn = document.getElementById('audio-toggle-btn');
     const bgAudio = document.getElementById('bg-audio');
+    const audioTooltip = document.getElementById('audio-tooltip');
     let isPlaying = false;
 
     if (audioToggleBtn && bgAudio) {
+        // Hide tooltip after 10 seconds
+        const tooltipTimeout = setTimeout(() => {
+            if (audioTooltip) {
+                audioTooltip.classList.add('hidden');
+            }
+        }, 10000);
+
         audioToggleBtn.addEventListener('click', function () {
+            // Hide tooltip immediately on click
+            if (audioTooltip) {
+                audioTooltip.classList.add('hidden');
+                clearTimeout(tooltipTimeout);
+            }
+
             if (isPlaying) {
                 bgAudio.pause();
                 audioToggleBtn.classList.remove('playing');

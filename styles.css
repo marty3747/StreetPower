@@ -1270,6 +1270,41 @@ body > * {
 }
 
 /* Audio Player Floating Button */
+.audio-tooltip {
+    position: fixed;
+    bottom: 2.7rem; /* Align vertically with the button center */
+    right: 6rem; /* Place to the left of the button */
+    background-color: var(--panel);
+    color: var(--paper);
+    padding: 10px 15px;
+    border-radius: var(--radius);
+    border: var(--stroke) solid var(--line);
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.7);
+    font-size: 1rem;
+    font-weight: 600;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    animation: bounceX 2s infinite;
+}
+
+.audio-tooltip.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes bounceX {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(-10px);
+    }
+}
+
 .audio-toggle-btn {
     position: fixed;
     bottom: 2rem;
@@ -1320,5 +1355,11 @@ body > * {
         width: 50px;
         height: 50px;
         font-size: 1.2rem;
+    }
+    .audio-tooltip {
+        bottom: 2.2rem;
+        right: 5rem;
+        font-size: 0.9rem;
+        padding: 8px 12px;
     }
 }
