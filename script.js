@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Auto-play (optional)
         // setInterval(nextSlide, 5000); // Disabled to prevent annoying jumps when user reads or interacts
-        
+
         // --- Image Modal functionality ---
         const imageModal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImg');
@@ -318,12 +318,12 @@ document.addEventListener('DOMContentLoaded', function () {
             imageModal.addEventListener('touchend', () => {
                 modalIsDragging = false;
             });
-            
+
             // Pinch to zoom or double-click could be added, but browser default handles double-tap zoom reasonably well 
             // since we removed user-scalable=no from meta if it was there. However, it's user-scalable=no in index.html.
             // Let's add basic double click to zoom in/out
             modalImg.addEventListener('dblclick', () => {
-                if(modalImg.style.transform === 'scale(2)') {
+                if (modalImg.style.transform === 'scale(2)') {
                     modalImg.style.transform = 'scale(1)';
                     modalImg.style.cursor = 'grab';
                 } else {
