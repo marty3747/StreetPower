@@ -291,43 +291,128 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (e.key === 'ArrowLeft') modalPrevSlide();
             });
 
-            // Modal Swipe for Mobile
+            // Modal Swipe, Pan, and Zoom for Mobile
             let modalStartX = 0;
+            let modalStartY = 0;
             let modalIsDragging = false;
+            
+            let currentScale = 1;
+            let initialDistance = 0;
+            let isPinching = false;
+            let lastTapTime = 0;
+            
+            let translateX = 0;
+            let translateY = 0;
+            let lastTranslateX = 0;
+            let lastTranslateY = 0;
+
+            function resetZoom() {
+                currentScale = 1;
+                translateX = 0;
+                translateY = 0;
+                lastTranslateX = 0;
+                lastTranslateY = 0;
+                modalImg.style.transform = `translate(0px, 0px) scale(1)`;
+                modalImg.style.cursor = 'grab';
+            }
+
+            modalNext.addEventListener('click', resetZoom);
+            modalPrev.addEventListener('click', resetZoom);
 
             imageModal.addEventListener('touchstart', (e) => {
-                modalStartX = e.touches[0].clientX;
-                modalIsDragging = true;
-            }, { passive: true });
+                if (e.touches.length === 2) {
+                    isPinching = true;
+                    modalIsDragging = false;
+                    initialDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    modalImg.style.transition = 'none';
+                } else if (e.touches.length === 1) {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTapTime;
+                    if (tapLength < 300 && tapLength > 0) {
+                        e.preventDefault();
+                        if (currentScale > 1) {
+                            resetZoom();
+                        } else {
+                            currentScale = 2;
+                            modalImg.style.transform = `translate(0px, 0px) scale(${currentScale})`;
+                            modalImg.style.transition = 'transform 0.25s ease';
+                        }
+                    } else {
+                        modalImg.style.transition = 'none';
+                    }
+                    lastTapTime = currentTime;
+
+                    isPinching = false;
+                    modalStartX = e.touches[0].clientX;
+                    modalStartY = e.touches[0].clientY;
+                    modalIsDragging = true;
+                }
+            }, { passive: false });
 
             imageModal.addEventListener('touchmove', (e) => {
-                if (!modalIsDragging) return;
-                const currentX = e.touches[0].clientX;
-                const diff = modalStartX - currentX;
+                if (isPinching && e.touches.length === 2) {
+                    e.preventDefault();
+                    const currentDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    const scaleDiff = currentDistance / initialDistance;
+                    let newScale = currentScale * scaleDiff;
+                    
+                    if (newScale < 1) newScale = 1;
+                    if (newScale > 4) newScale = 4;
+                    
+                    modalImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${newScale})`;
+                } else if (modalIsDragging && e.touches.length === 1) {
+                    const diffX = e.touches[0].clientX - modalStartX;
+                    const diffY = e.touches[0].clientY - modalStartY;
 
-                if (Math.abs(diff) > 50) {
-                    if (diff > 0) {
-                        modalNextSlide();
+                    if (currentScale > 1) {
+                        e.preventDefault();
+                        translateX = lastTranslateX + diffX;
+                        translateY = lastTranslateY + diffY;
+                        modalImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale})`;
                     } else {
-                        modalPrevSlide();
+                        if (Math.abs(diffX) > 50) {
+                            if (diffX > 0) {
+                                resetZoom();
+                                modalPrevSlide();
+                            } else {
+                                resetZoom();
+                                modalNextSlide();
+                            }
+                            modalIsDragging = false;
+                        }
                     }
-                    modalIsDragging = false;
                 }
-            }, { passive: true });
+            }, { passive: false });
 
-            imageModal.addEventListener('touchend', () => {
-                modalIsDragging = false;
+            imageModal.addEventListener('touchend', (e) => {
+                if (isPinching) {
+                    isPinching = false;
+                    const transform = modalImg.style.transform;
+                    const match = transform.match(/scale\(([^)]+)\)/);
+                    if (match) currentScale = parseFloat(match[1]);
+                    lastTranslateX = translateX;
+                    lastTranslateY = translateY;
+                } else if (modalIsDragging) {
+                    modalIsDragging = false;
+                    lastTranslateX = translateX;
+                    lastTranslateY = translateY;
+                }
+                modalImg.style.transition = 'transform 0.25s ease';
             });
 
-            // Pinch to zoom or double-click could be added, but browser default handles double-tap zoom reasonably well 
-            // since we removed user-scalable=no from meta if it was there. However, it's user-scalable=no in index.html.
-            // Let's add basic double click to zoom in/out
+            // PC Double click zoom
             modalImg.addEventListener('dblclick', () => {
-                if (modalImg.style.transform === 'scale(2)') {
-                    modalImg.style.transform = 'scale(1)';
-                    modalImg.style.cursor = 'grab';
+                if (currentScale > 1) {
+                    resetZoom();
                 } else {
-                    modalImg.style.transform = 'scale(2)';
+                    currentScale = 2;
+                    modalImg.style.transform = `translate(0px, 0px) scale(${currentScale})`;
                     modalImg.style.cursor = 'zoom-out';
                 }
             });
