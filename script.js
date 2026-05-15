@@ -231,7 +231,107 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Auto-play (optional)
-        setInterval(nextSlide, 5000);
+        // setInterval(nextSlide, 5000); // Disabled to prevent annoying jumps when user reads or interacts
+        
+        // --- Image Modal functionality ---
+        const imageModal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImg');
+        const modalClose = document.getElementById('modalClose');
+        const modalPrev = document.getElementById('modalPrev');
+        const modalNext = document.getElementById('modalNext');
+        const carouselImages = document.querySelectorAll('.carousel-img');
+
+        let currentModalIndex = 0;
+
+        function openModal(index) {
+            currentModalIndex = index;
+            modalImg.src = carouselImages[currentModalIndex].src;
+            imageModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // prevent bg scroll
+        }
+
+        function closeModal() {
+            imageModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function modalNextSlide() {
+            currentModalIndex = (currentModalIndex + 1) % carouselImages.length;
+            modalImg.src = carouselImages[currentModalIndex].src;
+        }
+
+        function modalPrevSlide() {
+            currentModalIndex = (currentModalIndex - 1 + carouselImages.length) % carouselImages.length;
+            modalImg.src = carouselImages[currentModalIndex].src;
+        }
+
+        carouselImages.forEach((img, index) => {
+            img.addEventListener('click', () => {
+                openModal(index);
+            });
+        });
+
+        if (imageModal) {
+            modalClose.addEventListener('click', closeModal);
+            modalNext.addEventListener('click', (e) => { e.stopPropagation(); modalNextSlide(); });
+            modalPrev.addEventListener('click', (e) => { e.stopPropagation(); modalPrevSlide(); });
+
+            // Close when clicking outside image
+            imageModal.addEventListener('click', (e) => {
+                if (e.target === imageModal || e.target.classList.contains('modal-content-wrapper')) {
+                    closeModal();
+                }
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (!imageModal.classList.contains('active')) return;
+                if (e.key === 'Escape') closeModal();
+                if (e.key === 'ArrowRight') modalNextSlide();
+                if (e.key === 'ArrowLeft') modalPrevSlide();
+            });
+
+            // Modal Swipe for Mobile
+            let modalStartX = 0;
+            let modalIsDragging = false;
+
+            imageModal.addEventListener('touchstart', (e) => {
+                modalStartX = e.touches[0].clientX;
+                modalIsDragging = true;
+            }, { passive: true });
+
+            imageModal.addEventListener('touchmove', (e) => {
+                if (!modalIsDragging) return;
+                const currentX = e.touches[0].clientX;
+                const diff = modalStartX - currentX;
+
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) {
+                        modalNextSlide();
+                    } else {
+                        modalPrevSlide();
+                    }
+                    modalIsDragging = false;
+                }
+            }, { passive: true });
+
+            imageModal.addEventListener('touchend', () => {
+                modalIsDragging = false;
+            });
+            
+            // Pinch to zoom or double-click could be added, but browser default handles double-tap zoom reasonably well 
+            // since we removed user-scalable=no from meta if it was there. However, it's user-scalable=no in index.html.
+            // Let's add basic double click to zoom in/out
+            modalImg.addEventListener('dblclick', () => {
+                if(modalImg.style.transform === 'scale(2)') {
+                    modalImg.style.transform = 'scale(1)';
+                    modalImg.style.cursor = 'grab';
+                } else {
+                    modalImg.style.transform = 'scale(2)';
+                    modalImg.style.cursor = 'zoom-out';
+                }
+            });
+        }
     }
 
     // Audio Player Functionality
