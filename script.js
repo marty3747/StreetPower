@@ -295,12 +295,12 @@ document.addEventListener('DOMContentLoaded', function () {
             let modalStartX = 0;
             let modalStartY = 0;
             let modalIsDragging = false;
-            
+
             let currentScale = 1;
             let initialDistance = 0;
             let isPinching = false;
             let lastTapTime = 0;
-            
+
             let translateX = 0;
             let translateY = 0;
             let lastTranslateX = 0;
@@ -361,10 +361,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     );
                     const scaleDiff = currentDistance / initialDistance;
                     let newScale = currentScale * scaleDiff;
-                    
+
                     if (newScale < 1) newScale = 1;
                     if (newScale > 4) newScale = 4;
-                    
+
                     modalImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${newScale})`;
                 } else if (modalIsDragging && e.touches.length === 1) {
                     const diffX = e.touches[0].clientX - modalStartX;
