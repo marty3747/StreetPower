@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (targetSection) {
                 const headerHeight = document.querySelector('.header').offsetHeight;
-                const targetPosition = targetSection.offsetTop - headerHeight;
+                const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - headerHeight;
 
                 window.scrollTo({
                     top: targetPosition,
