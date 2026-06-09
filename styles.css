@@ -1489,3 +1489,10 @@ body > * {
         font-size: 30px;
     }
 }
+
+.fa-knife {
+    width: 90px;
+    height: 90px;
+    background: url('images/knife.png') no-repeat center center;
+    background-size: contain;
+}
