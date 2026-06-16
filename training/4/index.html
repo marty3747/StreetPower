@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Уровень 4 — БЫВАЛЫЙ | СИЛА УЛИЦ</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../../images/logoSmall.png">
+    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="training-detail-page">
+    <div class="header-phantom"></div>
+    <header class="header">
+        <nav class="nav">
+            <div class="container">
+                <div class="nav-brand">
+                    <a href="/"><img class="nav-logo" src="../../images/logo.png" alt="СИЛА УЛИЦ"></a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="/training">Тренировки</a></li>
+                    <li><a href="/#about">О турнире</a></li>
+                    <li><a href="/#goals">Цели</a></li>
+                    <li><a href="/#rules">Правила</a></li>
+                    <li><a href="/#registration">Регистрация</a></li>
+                    <li><a href="/#contacts">Контакты</a></li>
+                    <li><a href="/#documents">Документы</a></li>
+                </ul>
+                <div class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="training-hero">
+            <div class="container">
+                <a href="/training" class="training-back"><i class="fas fa-arrow-left"></i> Все тренировки</a>
+                <span class="training-level-badge">Уровень: 4 / 7</span>
+                <h1 class="training-hero-title">Бывалый</h1>
+                <p class="training-hero-subtitle">За плечами сотни тренировок</p>
+                <div class="training-hero-actions">
+                    <a href="/trainings/4.pdf" class="cta-button" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Скачать PDF</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="training-alert">
+                    <i class="fas fa-triangle-exclamation"></i>
+                    <p><strong>Важно:</strong> перед каждой тренировкой делай разминку 5–10 минут. Работай без боли, в комфортном темпе. При плохом самочувствии прекращай тренировку.</p>
+                </div>
+
+                <div class="training-placeholder">
+                    <i class="fas fa-hourglass-half"></i>
+                    <h2>Программа скоро появится</h2>
+                    <p>Полная программа уровня «Бывалый» будет доступна на сайте. Пока ты можешь скачать PDF-версию тренировки.</p>
+                    <a href="/trainings/4.pdf" class="cta-button" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Открыть PDF</a>
+                </div>
+
+                <nav class="training-nav" aria-label="Навигация по уровням">
+                    <a href="/training/3" class="training-nav-link prev"><i class="fas fa-arrow-left"></i> Блатной</a>
+                    <a href="/training/5" class="training-nav-link next">Старший <i class="fas fa-arrow-right"></i></a>
+                </nav>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 СИЛА УЛИЦ. Все права защищены.</p>
+            <p>Наименование: Индивидуальный предприниматель Филиппов Никита Юрьевич</p>
+            <p>ИНН: 616714476864</p>
+            <p>ОГРНИП: 326619600096314</p>
+            <p>Контакты: streetforce.team@mail.ru</p>
+        </div>
+    </footer>
+
+    <audio id="bg-audio" src="../../images/Sefyu - Soumis.mp3" loop></audio>
+    <div id="audio-tooltip" class="audio-tooltip">Включи музыку! <i class="fas fa-arrow-right bx-fade-right"></i></div>
+    <button id="audio-toggle-btn" class="audio-toggle-btn" aria-label="Play/Pause Music">
+        <i class="fas fa-play"></i>
+    </button>
+
+    <script src="../../script.js"></script>
+</body>
+</html>
