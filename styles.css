@@ -116,6 +116,17 @@ body > * {
     text-transform: uppercase;
 }
 
+.nav-brand a {
+    display: inline-block;
+    line-height: 0;
+    text-decoration: none;
+}
+
+.nav-brand a:focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 4px;
+}
+
 .nav-logo {
     transform: translateY(4px);
     width: 170px;
