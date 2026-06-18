@@ -1519,6 +1519,97 @@ body > * {
     color: var(--muted);
 }
 
+.training-info-entry {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 2rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--surface);
+    border: var(--stroke) solid var(--accent);
+    box-shadow: var(--shadow) var(--shadow) 0 rgba(0,0,0,0.85);
+    text-decoration: none;
+    color: var(--paper);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.training-info-entry:hover {
+    border-color: var(--accent-2);
+    transform: translate(var(--stroke), var(--stroke));
+    box-shadow: calc(var(--shadow) - 6px) calc(var(--shadow) - 6px) 0 rgba(0,0,0,0.8);
+}
+
+.training-info-entry > .fa-book-open {
+    font-size: 1.5rem;
+    color: var(--accent-2);
+    flex-shrink: 0;
+}
+
+.training-info-entry > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+}
+
+.training-info-entry-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.training-info-entry-sub {
+    font-size: 0.9rem;
+    font-family: var(--font-sans);
+    color: var(--muted);
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.45;
+}
+
+.training-info-entry-arrow {
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.training-info-entry:hover .training-info-entry-arrow {
+    color: var(--accent-2);
+    transform: translateX(4px);
+}
+
+.training-term-text {
+    color: var(--paper);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin: 0 0 1rem;
+    padding: 0 1.25rem;
+}
+
+.training-term-text:last-child,
+.training-term-example:last-child {
+    margin-bottom: 0;
+}
+
+.training-term-example {
+    margin: 0 1.25rem 1.25rem;
+    padding: 0.85rem 1rem;
+    background: rgba(0,0,0,0.35);
+    border-left: 3px solid var(--accent);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--muted);
+}
+
+.training-term-example strong {
+    color: var(--accent-2);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
 /* Training detail page */
 .training-detail-page {
     display: flex;
@@ -2019,5 +2110,15 @@ body > * {
     .training-nav-link.prev {
         width: 100%;
         justify-content: center;
+    }
+
+    .training-info-entry {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.85rem;
+    }
+
+    .training-info-entry-arrow {
+        align-self: flex-end;
     }
 }
