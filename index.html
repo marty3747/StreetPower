@@ -325,48 +325,20 @@
     <section id="registration" class="section with-bg bg-dips">
         <div class="container">
             <h2 class="section-title" id="registration-title">Форма регистрации на турнир</h2>
-            <form class="registration-form" id="registration-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="surname">Фамилия</label>
-                        <input type="text" id="surname" name="surname" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Имя</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="patronymic">Отчество</label>
-                        <input type="text" id="patronymic" name="patronymic">
-                    </div>
-                    <div class="form-group">
-                        <label for="age">Возраст</label>
-                        <input type="number" id="age" name="age" min="18" required>
+            <div class="registration-cta">
+                <div class="registration-cta-panel">
+                    <p class="registration-cta-headline">Летний турнир уже прошёл</p>
+                    <p class="registration-cta-sub">
+                        Следующее мероприятие планируется на <span class="registration-cta-date">15&nbsp;сентября</span>
+                    </p>
+                    <p class="registration-cta-text">
+                        Вступай в диалог в Telegram — следи за новостями, тренируйся вместе с нами и общайся в нашем чате.
+                    </p>
+                    <div class="registration-cta-action">
+                        <img class="group-qr" src="images/group-qr.webp" alt="QR Телеграм">
+                        <a href="https://t.me/+nnMWuDRMlLwxZWZi" target="_blank" rel="noopener noreferrer" class="cta-button">Перейти в Telegram</a>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="telegram">Телеграм</label>
-                    <input type="text" id="telegram" name="telegram" placeholder="@username" required>
-                </div>
-                <!-- <a href="/agreement" style="text-decoration: underline;">Согласие на обработку персональных данных</a> -->
-                <div class="form-group checkbox-group">
-                    <input type="checkbox" id="privacy" name="privacy" required>
-                    <label for="privacy">Нажимая кнопку «Отправить», я даю согласие на обработку моих персональных данных в соответствии с <a href="agreement1.docx" style="text-decoration: underline;">Политикой обработки персональных данных.</a></label>
-                </div>
-                <div class="form-group checkbox-group">
-                    <input type="checkbox" id="privacy" name="privacy" required>
-                    <label for="privacy">Нажимая кнопку «Отправить», я даю согласие НА ПОЛУЧЕНИЕ ИНФОРМАЦИОННЫХ СООБЩЕНИЙ в соответствии с <a href="agreement2.docx" style="text-decoration: underline;">Политикой обработки персональных данных.</a></label>
-                </div>
-                <button type="submit" class="submit-button">Подать заявку</button>
-            </form>
-            <div id="registration-success" style="display: none; text-align: center; padding: 40px 0;">
-                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Заявка успешно отправлена!</h3>
-                <p style="margin-bottom: 20px; font-weight: bold;">Обязательно вступайте в диалог в телеграмм, там все подробности о турнире, время проведения именно Вашей группы и многое другое:</p>
-                <img src="images/group-qr.webp" alt="QR Телеграм" style="max-width: 250px; border-radius: 10px; margin-bottom: 30px;">
-                <br>
-                <a href="https://t.me/+nnMWuDRMlLwxZWZi" target="_blank" class="cta-button" style="display: inline-block;">Перейти в Telegram</a>
             </div>
         </div>
     </section>

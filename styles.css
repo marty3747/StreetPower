@@ -921,6 +921,72 @@ body > * {
     box-shadow: var(--shadow) var(--shadow) 0 rgba(0,0,0,0.7);
 }
 
+.registration-cta {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.registration-cta-panel {
+    text-align: center;
+    background: var(--panel);
+    padding: 3rem;
+    border-radius: var(--radius);
+    border: var(--stroke) solid var(--line);
+    box-shadow: var(--shadow) var(--shadow) 0 rgba(0,0,0,0.7);
+}
+
+.registration-cta-headline {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--paper);
+    margin-bottom: 1.25rem;
+    text-shadow: 0 2px 0 rgba(0,0,0,0.45);
+}
+
+.registration-cta-sub {
+    display: inline-block;
+    padding: 8px 14px;
+    margin-bottom: 1.5rem;
+    background: rgba(16,16,16,0.55);
+    border: 1px solid var(--line);
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.45) inset;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.registration-cta-date {
+    color: var(--accent-2);
+    font-weight: 700;
+}
+
+.registration-cta-text {
+    color: var(--paper);
+    font-size: 1.1rem;
+    font-weight: 800;
+    line-height: 1.65;
+    max-width: 480px;
+    margin: 0 auto 2rem;
+}
+
+.registration-cta-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.registration-cta-action .group-qr {
+    max-width: 250px;
+}
+
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1293,6 +1359,15 @@ body > * {
 
     .registration-form {
         padding: 2rem;
+    }
+
+    .registration-cta-panel {
+        padding: 2rem;
+    }
+
+    .registration-cta-sub {
+        font-size: 0.82rem;
+        letter-spacing: 0.8px;
     }
 
     .partner-logo {
