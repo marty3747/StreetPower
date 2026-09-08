@@ -426,12 +426,32 @@ document.addEventListener('DOMContentLoaded', function () {
     let isPlaying = false;
 
     if (audioToggleBtn && bgAudio) {
+        bgAudio.volume = 1;
+        bgAudio.preload = 'auto';
+
+        const setStopped = () => {
+            isPlaying = false;
+            audioToggleBtn.classList.remove('playing');
+            audioToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
+        };
+
+        const setPlaying = () => {
+            isPlaying = true;
+            audioToggleBtn.classList.add('playing');
+            audioToggleBtn.innerHTML = '<i class="fas fa-music"></i>';
+        };
+
         // Hide tooltip after 10 seconds
         const tooltipTimeout = setTimeout(() => {
             if (audioTooltip) {
                 audioTooltip.classList.add('hidden');
             }
         }, 10000);
+
+        bgAudio.addEventListener('error', () => {
+            console.error('Не удалось загрузить аудио', bgAudio.error);
+            setStopped();
+        });
 
         audioToggleBtn.addEventListener('click', function () {
             // Hide tooltip immediately on click
@@ -442,22 +462,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (isPlaying) {
                 bgAudio.pause();
-                audioToggleBtn.classList.remove('playing');
-                // Optional: change icon back to play state
-                audioToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
-            } else {
-                bgAudio.play().catch(error => {
-                    console.log('Автовоспроизведение было заблокировано браузером', error);
-                });
-                audioToggleBtn.classList.add('playing');
-                // Change icon to pause or active music state
-                audioToggleBtn.innerHTML = '<i class="fas fa-music"></i>';
+                setStopped();
+                return;
             }
-            isPlaying = !isPlaying;
+
+            const playPromise = bgAudio.play();
+            if (playPromise && typeof playPromise.then === 'function') {
+                playPromise.then(setPlaying).catch((error) => {
+                    console.error('Не удалось включить музыку', error);
+                    setStopped();
+                });
+            } else {
+                setPlaying();
+            }
         });
 
-        // Initial icon state
-        audioToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
+        setStopped();
     }
 });
 
