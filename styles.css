@@ -1312,7 +1312,7 @@ body > * {
 
 .map-coords {
     margin: 0.85rem 0 0;
-    text-align: center;
+    text-align: right;
     font-family: var(--font-mono);
     font-size: 0.95rem;
     letter-spacing: 0.4px;
