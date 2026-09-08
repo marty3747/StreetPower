@@ -791,6 +791,53 @@ body > * {
     transform: scale(1.02);
 }
 
+.carousel-video {
+    position: relative;
+    width: 100%;
+    max-width: 711px;
+    height: 400px;
+    background: #000;
+    cursor: pointer;
+}
+
+.carousel-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.carousel-video-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 72px;
+    height: 72px;
+    border: 2px solid var(--line);
+    background: var(--accent);
+    color: var(--paper);
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 6px 6px 0 rgba(0,0,0,0.7);
+    padding-left: 4px;
+}
+
+.carousel-video-play:hover {
+    background: var(--accent-2);
+}
+
+.carousel-video-player {
+    width: 100%;
+    height: 400px;
+    border: 0;
+    background: #000;
+    display: block;
+}
+
 .carousel-btn {
     position: absolute;
     top: 50%;
@@ -1559,6 +1606,11 @@ body > * {
 
     .carousel-img {
         height: 250px;
+    }
+
+    .carousel-video,
+    .carousel-video-player {
+        height: 220px;
     }
 
     .carousel-btn {

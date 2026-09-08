@@ -169,9 +169,44 @@ document.addEventListener('DOMContentLoaded', function () {
         let currentSlide = 0;
         const totalSlides = carouselTrack.children.length;
 
+        const RUTUBE_ID = '10161363abff6031eccc1a99455b355e';
+
+        function stopCarouselVideo() {
+            const player = carouselTrack.querySelector('.carousel-video-player');
+            if (player) {
+                player.src = '';
+                player.remove();
+            }
+            const poster = document.getElementById('carouselVideo');
+            if (poster) poster.hidden = false;
+        }
+
+        function playCarouselVideo() {
+            const slide = carouselTrack.querySelector('.carousel-slide--video');
+            const poster = document.getElementById('carouselVideo');
+            if (!slide || !poster) return;
+
+            poster.hidden = true;
+            let player = slide.querySelector('.carousel-video-player');
+            if (!player) {
+                player = document.createElement('iframe');
+                player.className = 'carousel-video-player';
+                player.title = 'Хайлайт турнира СИЛА УЛИЦ';
+                player.setAttribute('allow', 'clipboard-write; autoplay; encrypted-media; fullscreen; picture-in-picture');
+                player.setAttribute('allowfullscreen', '');
+                player.setAttribute('frameborder', '0');
+                slide.appendChild(player);
+            }
+            player.src = `https://rutube.ru/play/embed/${RUTUBE_ID}?autoplay=1`;
+        }
+
         function updateCarousel() {
             const translateX = -currentSlide * 100;
             carouselTrack.style.transform = `translateX(${translateX}%)`;
+
+            if (!carouselTrack.children[currentSlide].classList.contains('carousel-slide--video')) {
+                stopCarouselVideo();
+            }
 
             // Update indicators
             indicators.forEach((indicator, index) => {
@@ -192,6 +227,14 @@ document.addEventListener('DOMContentLoaded', function () {
         // Event listeners
         nextBtn.addEventListener('click', nextSlide);
         prevBtn.addEventListener('click', prevSlide);
+
+        const videoPoster = document.getElementById('carouselVideo');
+        if (videoPoster) {
+            videoPoster.addEventListener('click', (e) => {
+                e.stopPropagation();
+                playCarouselVideo();
+            });
+        }
 
         indicators.forEach((indicator, index) => {
             indicator.addEventListener('click', () => {
