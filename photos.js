@@ -165,11 +165,12 @@ function openLightbox(items, startIndex) {
     };
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+async function initPhotosAlbum() {
     const grid = document.getElementById('photosGrid');
     const status = document.getElementById('photosStatus');
     const filters = document.getElementById('photosFilters');
-    if (!grid || !status) return;
+    if (!grid || !status || grid.dataset.ready === '1') return;
+    grid.dataset.ready = '1';
 
     try {
         const items = await fetchAlbumItems();
@@ -201,5 +202,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
         status.innerHTML = `Не получилось открыть архив прямо здесь. <a href="${YADISK_PUBLIC_KEY}" target="_blank" rel="noopener noreferrer">Открыть папку на Яндекс Диске</a>`;
         grid.innerHTML = '';
+        grid.dataset.ready = '';
     }
-});
+}
+
+window.initPhotosAlbum = initPhotosAlbum;
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPhotosAlbum);
+} else {
+    initPhotosAlbum();
+}

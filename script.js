@@ -1,14 +1,31 @@
-// Mobile Navigation Toggle
-document.addEventListener('DOMContentLoaded', function () {
-    const navToggle = document.querySelector('.nav-toggle');
-    const navLinks = document.querySelector('.nav-links');
+const PERSIST_AUDIO_IDS = ['bg-audio', 'audio-tooltip', 'audio-toggle-btn'];
+const pageCleanups = [];
 
-    if (navToggle && navLinks) {
-        navToggle.addEventListener('click', function () {
-            navLinks.classList.toggle('active');
-            navToggle.classList.toggle('active');
-        });
+function cleanupPage() {
+    while (pageCleanups.length) {
+        try { pageCleanups.pop()(); } catch (error) { /* ignore */ }
     }
+}
+
+function closeMobileNav() {
+    document.querySelector('.nav-links')?.classList.remove('active');
+    document.querySelector('.nav-toggle')?.classList.remove('active');
+}
+
+function scrollToHash(hash) {
+    if (!hash || hash === '#') return false;
+    const target = document.querySelector(hash);
+    if (!target) return false;
+    const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
+    window.scrollTo({
+        top: target.getBoundingClientRect().top + window.pageYOffset - headerHeight,
+        behavior: 'smooth'
+    });
+    return true;
+}
+
+function initPage() {
+    cleanupPage();
 
     // Smooth scrolling for navigation links
     const links = document.querySelectorAll('a[href^="#"]');
@@ -28,11 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
 
-            // Close mobile menu if open
-            if (navLinks.classList.contains('active')) {
-                navLinks.classList.remove('active');
-                navToggle.classList.remove('active');
-            }
+            closeMobileNav();
         });
     });
 
@@ -115,16 +128,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Header background on scroll
-    window.addEventListener('scroll', function () {
-        const header = document.querySelector('.header');
-        if (window.scrollY > 100) {
-            header.style.background = 'rgba(16, 16, 16, 0.92)';
-        } else {
-            header.style.background = 'rgba(16, 16, 16, 0.78)';
-        }
-    });
-
     // Add animation on scroll
     const observerOptions = {
         threshold: 0.1,
@@ -139,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }, observerOptions);
+    pageCleanups.push(() => observer.disconnect());
 
     // Observe all cards and sections
     const animatedElements = document.querySelectorAll('.about-card, .group-card, .discipline-card, .award-item, .info-card, .contact-item');
@@ -327,12 +331,14 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             // Keyboard navigation
-            document.addEventListener('keydown', (e) => {
+            const onModalKey = (e) => {
                 if (!imageModal.classList.contains('active')) return;
                 if (e.key === 'Escape') closeModal();
                 if (e.key === 'ArrowRight') modalNextSlide();
                 if (e.key === 'ArrowLeft') modalPrevSlide();
-            });
+            };
+            document.addEventListener('keydown', onModalKey);
+            pageCleanups.push(() => document.removeEventListener('keydown', onModalKey));
 
             // Modal Swipe, Pan, and Zoom for Mobile
             let modalStartX = 0;
@@ -462,65 +468,189 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Audio Player Functionality
+}
+
+function initAudioOnce() {
     const audioToggleBtn = document.getElementById('audio-toggle-btn');
     const bgAudio = document.getElementById('bg-audio');
     const audioTooltip = document.getElementById('audio-tooltip');
+    if (!audioToggleBtn || !bgAudio || audioToggleBtn.dataset.bound === '1') return;
+
+    audioToggleBtn.dataset.bound = '1';
+    bgAudio.volume = 1;
+    bgAudio.preload = 'auto';
     let isPlaying = false;
 
-    if (audioToggleBtn && bgAudio) {
-        bgAudio.volume = 1;
-        bgAudio.preload = 'auto';
+    const setStopped = () => {
+        isPlaying = false;
+        audioToggleBtn.classList.remove('playing');
+        audioToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
+    };
 
-        const setStopped = () => {
-            isPlaying = false;
-            audioToggleBtn.classList.remove('playing');
-            audioToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
-        };
+    const setPlaying = () => {
+        isPlaying = true;
+        audioToggleBtn.classList.add('playing');
+        audioToggleBtn.innerHTML = '<i class="fas fa-music"></i>';
+    };
 
-        const setPlaying = () => {
-            isPlaying = true;
-            audioToggleBtn.classList.add('playing');
-            audioToggleBtn.innerHTML = '<i class="fas fa-music"></i>';
-        };
+    const tooltipTimeout = setTimeout(() => {
+        if (audioTooltip) audioTooltip.classList.add('hidden');
+    }, 10000);
 
-        // Hide tooltip after 10 seconds
-        const tooltipTimeout = setTimeout(() => {
-            if (audioTooltip) {
-                audioTooltip.classList.add('hidden');
-            }
-        }, 10000);
-
-        bgAudio.addEventListener('error', () => {
-            console.error('Не удалось загрузить аудио', bgAudio.error);
-            setStopped();
-        });
-
-        audioToggleBtn.addEventListener('click', function () {
-            // Hide tooltip immediately on click
-            if (audioTooltip) {
-                audioTooltip.classList.add('hidden');
-                clearTimeout(tooltipTimeout);
-            }
-
-            if (isPlaying) {
-                bgAudio.pause();
-                setStopped();
-                return;
-            }
-
-            const playPromise = bgAudio.play();
-            if (playPromise && typeof playPromise.then === 'function') {
-                playPromise.then(setPlaying).catch((error) => {
-                    console.error('Не удалось включить музыку', error);
-                    setStopped();
-                });
-            } else {
-                setPlaying();
-            }
-        });
-
+    bgAudio.addEventListener('error', () => {
+        console.error('Не удалось загрузить аудио', bgAudio.error);
         setStopped();
+    });
+
+    audioToggleBtn.addEventListener('click', function () {
+        if (audioTooltip) {
+            audioTooltip.classList.add('hidden');
+            clearTimeout(tooltipTimeout);
+        }
+
+        if (isPlaying) {
+            bgAudio.pause();
+            setStopped();
+            return;
+        }
+
+        const playPromise = bgAudio.play();
+        if (playPromise && typeof playPromise.then === 'function') {
+            playPromise.then(setPlaying).catch((error) => {
+                console.error('Не удалось включить музыку', error);
+                setStopped();
+            });
+        } else {
+            setPlaying();
+        }
+    });
+
+    setStopped();
+}
+
+function initHeaderScroll() {
+    window.addEventListener('scroll', function () {
+        const header = document.querySelector('.header');
+        if (!header) return;
+        header.style.background = window.scrollY > 100
+            ? 'rgba(16, 16, 16, 0.92)'
+            : 'rgba(16, 16, 16, 0.78)';
+    });
+}
+
+function shouldHandleInternally(anchor, event) {
+    if (!anchor || event.defaultPrevented || event.button !== 0) return false;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+    if (anchor.target && anchor.target !== '_self') return false;
+    if (anchor.hasAttribute('download')) return false;
+    const raw = anchor.getAttribute('href');
+    if (!raw || raw.startsWith('mailto:') || raw.startsWith('tel:') || raw.startsWith('javascript:')) return false;
+    let dest;
+    try { dest = new URL(anchor.href); } catch { return false; }
+    if (dest.origin !== location.origin) return false;
+    if (/\.(pdf|docx?|xlsx?|zip|mp3|mp4)$/i.test(dest.pathname)) return false;
+    return dest;
+}
+
+async function ensurePageScriptsFromList(scripts, pageUrl) {
+    for (const script of scripts) {
+        const src = script.getAttribute('src');
+        if (!src) continue;
+        const abs = new URL(src, pageUrl).href;
+        if (/\/script\.js(\?|$)/.test(abs)) continue;
+        if ([...document.scripts].some((existing) => existing.src === abs)) continue;
+        await new Promise((resolve, reject) => {
+            const el = document.createElement('script');
+            el.src = abs;
+            el.onload = resolve;
+            el.onerror = reject;
+            document.body.appendChild(el);
+        });
     }
+}
+
+let navigating = false;
+
+async function navigateTo(url, push) {
+    if (navigating) return;
+    navigating = true;
+    try {
+        const response = await fetch(url, { headers: { 'X-Requested-With': 'fetch' } });
+        if (!response.ok) throw new Error('nav');
+        const html = await response.text();
+        const next = new DOMParser().parseFromString(html, 'text/html');
+        const persist = PERSIST_AUDIO_IDS
+            .map((id) => document.getElementById(id))
+            .filter(Boolean);
+        const dest = new URL(url, location.href);
+        const extraScripts = [...next.querySelectorAll('script[src]')];
+        next.querySelectorAll('script').forEach((el) => el.remove());
+        PERSIST_AUDIO_IDS.forEach((id) => next.getElementById(id)?.remove());
+        [...document.body.children].forEach((el) => {
+            if (!persist.includes(el)) el.remove();
+        });
+        while (next.body.firstChild) {
+            document.body.insertBefore(next.body.firstChild, persist[0] || null);
+        }
+        persist.forEach((el) => document.body.appendChild(el));
+
+        document.title = next.title;
+        document.body.className = next.body.className;
+        if (push) history.pushState({ url: dest.href }, next.title, dest.href);
+
+        closeMobileNav();
+        window.scrollTo(0, 0);
+        await ensurePageScriptsFromList(extraScripts, dest.href);
+        initPage();
+        if (typeof window.initPhotosAlbum === 'function') {
+            window.initPhotosAlbum();
+        }
+        if (dest.hash) {
+            requestAnimationFrame(() => scrollToHash(dest.hash));
+        }
+    } catch (error) {
+        location.href = url;
+    } finally {
+        navigating = false;
+    }
+}
+
+function bindPersistentNavigation() {
+    document.addEventListener('click', (event) => {
+        const toggle = event.target.closest('.nav-toggle');
+        if (toggle) {
+            document.querySelector('.nav-links')?.classList.toggle('active');
+            document.querySelector('.nav-toggle')?.classList.toggle('active');
+            return;
+        }
+
+        const anchor = event.target.closest('a');
+        const dest = shouldHandleInternally(anchor, event);
+        if (!dest) return;
+
+        const samePage = dest.pathname === location.pathname && dest.search === location.search;
+        if (samePage) {
+            if (dest.hash) {
+                event.preventDefault();
+                scrollToHash(dest.hash);
+                closeMobileNav();
+            }
+            return;
+        }
+
+        event.preventDefault();
+        navigateTo(dest.href, true);
+    });
+
+    window.addEventListener('popstate', () => {
+        navigateTo(location.href, false);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    initAudioOnce();
+    initHeaderScroll();
+    initPage();
+    bindPersistentNavigation();
 });
 
