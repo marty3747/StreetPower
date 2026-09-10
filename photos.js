@@ -1,5 +1,11 @@
 const YADISK_PUBLIC_KEY = 'https://disk.yandex.ru/d/PdHlbN_mQPjXUQ';
 const YADISK_API = 'https://cloud-api.yandex.net/v1/disk/public/resources';
+const HIGHLIGHT_NAME = 'sila_highlight.mp4';
+const HIGHLIGHT_RUTUBE = '10161363abff6031eccc1a99455b355e';
+
+function isHighlightItem(item) {
+    return (item.name || '').toLowerCase() === HIGHLIGHT_NAME;
+}
 
 function isVideoItem(item) {
     return (item.media_type === 'video') || (item.mime_type || '').startsWith('video/');
@@ -73,6 +79,20 @@ function renderTile(item, index) {
     }
 
     return button;
+}
+
+function renderHighlight() {
+    const wrap = document.getElementById('photosHighlight');
+    const frame = document.getElementById('photosHighlightFrame');
+    if (!wrap || !frame) return;
+
+    const player = document.createElement('iframe');
+    player.src = `https://rutube.ru/play/embed/${HIGHLIGHT_RUTUBE}`;
+    player.title = 'Хайлайт рилс турнира СИЛА УЛИЦ #1';
+    player.allow = 'clipboard-write; autoplay';
+    player.allowFullscreen = true;
+    frame.replaceChildren(player);
+    wrap.hidden = false;
 }
 
 function applyFilter(grid, filter) {
@@ -153,12 +173,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         const items = await fetchAlbumItems();
-        const photos = items.filter((item) => !isVideoItem(item)).length;
-        const videos = items.length - photos;
+        const albumItems = items.filter((item) => !isHighlightItem(item));
+        const photos = albumItems.filter((item) => !isVideoItem(item)).length;
+        const videos = albumItems.length - photos;
         status.textContent = `${photos} фото · ${videos} видео`;
 
-        const tiles = items.map((item, index) => renderTile(item, index));
+        renderHighlight();
+
+        const tiles = albumItems.map((item, index) => renderTile(item, index));
         grid.replaceChildren(...tiles);
+        applyFilter(grid, 'image');
 
         tiles.forEach((tile, index) => {
             tile.addEventListener('click', () => openLightbox(tiles, index));

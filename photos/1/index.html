@@ -2,7 +2,6 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="referrer" content="no-referrer">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Турнир СИЛА УЛИЦ #1 | Фотографии</title>
     <link rel="icon" type="image/png" sizes="32x32" href="../../images/logoSmall.png">
@@ -54,11 +53,15 @@
 
         <section class="section">
             <div class="container">
+                <div class="photos-highlight" id="photosHighlight" hidden>
+                    <p class="photos-highlight-kicker">Хайлайт рилс турнира</p>
+                    <div class="photos-highlight-frame" id="photosHighlightFrame"></div>
+                </div>
                 <div class="photos-toolbar">
                     <p class="photos-status" id="photosStatus">Загружаем архив…</p>
                     <div class="photos-filters" id="photosFilters">
-                        <button type="button" class="photos-filter is-active" data-filter="all">Все</button>
-                        <button type="button" class="photos-filter" data-filter="image">Фото</button>
+                        <button type="button" class="photos-filter is-active" data-filter="image">Фото</button>
+                        <button type="button" class="photos-filter" data-filter="all">Все</button>
                         <button type="button" class="photos-filter" data-filter="video">Видео</button>
                     </div>
                 </div>
@@ -105,6 +108,6 @@
     </button>
 
     <script src="../../script.js"></script>
-    <script src="../../photos.js?v=20260911e"></script>
+    <script src="../../photos.js?v=20260911f"></script>
 </body>
 </html>
