@@ -1630,6 +1630,29 @@ body > * {
     .event-info-grid,
     .partners-content {
         grid-template-columns: 1fr;
+        width: 100%;
+        max-width: 100%;
+        gap: 1.25rem;
+        padding-right: var(--shadow);
+        padding-bottom: var(--shadow);
+    }
+
+    #goals,
+    #about {
+        overflow-x: clip;
+    }
+
+    .goal-card,
+    .about-card {
+        min-width: 0;
+        max-width: 100%;
+        padding: 1.5rem 1.15rem;
+        box-shadow: 6px 6px 0 rgba(0,0,0,0.7);
+    }
+
+    .goal-card h3,
+    .about-card h3 {
+        overflow-wrap: anywhere;
     }
 
     .form-row {
