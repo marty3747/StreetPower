@@ -1451,12 +1451,14 @@ body > * {
 }
 
 .footer-socials {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
     flex-shrink: 0;
-    text-align: right;
 }
 
 .footer-socials-label {
-    display: block;
     font-family: var(--font-mono);
     font-size: 0.68rem;
     letter-spacing: 0.8px;
@@ -1469,7 +1471,6 @@ body > * {
 .footer-social {
     width: 20px;
     height: 20px;
-    margin-top: 0.35rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1566,6 +1567,17 @@ body > * {
     .section-subtitle { text-align: center; margin-left: auto; }
     .age-groups h3 { text-align: center; }
     .rules-content h3 { text-align: center; }
+
+    .footer-socials {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.45rem;
+        height: calc(1.05rem * 1.6);
+    }
+
+    .footer-socials-label {
+        line-height: 1;
+    }
 
     .about-grid,
     .goals-grid,
