@@ -25,6 +25,11 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
 body {
     font-family: var(--font-sans);
     line-height: 1.6;
@@ -32,6 +37,8 @@ body {
     scroll-behavior: smooth;
     background: var(--charcoal);
     font-size: 1.05rem;
+    overflow-x: hidden;
+    max-width: 100%;
 }
 
 .registration-form a {
@@ -1282,17 +1289,28 @@ body > * {
 }
 
 /* Contacts */
+#contacts {
+    overflow-x: clip;
+}
+
 .contacts-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
     max-width: 1000px;
     margin: 0 auto;
+    min-width: 0;
+}
+
+.contacts-info,
+.contacts-map {
+    min-width: 0;
+    max-width: 100%;
 }
 
 .contacts-info h3,
 .contacts-map h3 {
-    font-size: 1.8rem;
+    font-size: clamp(1.25rem, 6vw, 1.8rem);
     margin-bottom: 2rem;
     color: var(--paper);
     text-align: center;
@@ -1300,6 +1318,8 @@ body > * {
     font-weight: 900;
     letter-spacing: 1px;
     text-transform: uppercase;
+    line-height: 1.05;
+    overflow-wrap: anywhere;
 }
 
 .contact-item {
@@ -1339,6 +1359,8 @@ body > * {
     color: rgba(233,233,227,0.9);
     text-decoration: none;
     font-weight: 500;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .contact-item a:hover {
@@ -1346,15 +1368,24 @@ body > * {
 }
 
 .map-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: 360px;
     background: var(--panel);
     border-radius: var(--radius);
     border: var(--stroke) solid var(--line);
-    padding: 1rem;
+    overflow: hidden;
     box-shadow: var(--shadow) var(--shadow) 0 rgba(0,0,0,0.65);
 }
 
 .map-container iframe {
-    border-radius: 8px;
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
 }
 
 .map-coords {
@@ -1363,6 +1394,7 @@ body > * {
     font-family: var(--font-mono);
     font-size: 0.95rem;
     letter-spacing: 0.4px;
+    overflow-wrap: anywhere;
 }
 
 .map-coords a {
@@ -1376,6 +1408,15 @@ body > * {
     border-bottom-color: var(--accent-2);
 }
 
+.contacts-docs {
+    margin-top: 20px;
+    text-align: end;
+}
+
+.contacts-docs p {
+    margin: 0;
+}
+
 .social-card{
     margin-top: 1.25rem;
     padding: 1.6rem;
@@ -1383,6 +1424,8 @@ body > * {
     border-radius: var(--radius);
     border: var(--stroke) solid var(--line);
     box-shadow: var(--shadow) var(--shadow) 0 rgba(0,0,0,0.65);
+    overflow: hidden;
+    max-width: 100%;
 }
 .social-card-title{
     font-family: var(--font-display);
@@ -1408,15 +1451,16 @@ body > * {
 }
 
 .social-card-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    display: flex;
+    justify-content: center;
 }
 
 .group-qr {
     display: block;
     margin: 0 auto;
-    max-width: 200px;
+    width: min(200px, 100%);
+    height: auto;
+    object-fit: contain;
     border-radius: var(--radius);
     border: var(--stroke) solid var(--line);
     box-shadow: var(--shadow) var(--shadow) 0 rgba(0,0,0,0.65);
@@ -1615,6 +1659,23 @@ body > * {
         gap: 2rem;
     }
 
+    .map-container {
+        height: 260px;
+        box-shadow: 4px 4px 0 rgba(0,0,0,0.65);
+    }
+
+    .map-coords,
+    .contacts-docs {
+        text-align: left;
+        max-width: 100%;
+        padding-right: 4.5rem;
+    }
+
+    .map-coords {
+        font-size: 0.82rem;
+        letter-spacing: 0;
+    }
+
     .contact-item {
         flex-direction: column;
         text-align: center;
@@ -1709,10 +1770,6 @@ body > * {
 
     .kings-col-place {
         width: 100%;
-    }
-
-    .social-card-content {
-        grid-template-columns: 1fr;
     }
 }
 
