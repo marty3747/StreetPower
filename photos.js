@@ -58,6 +58,7 @@ function renderTile(item, index) {
 
     if (thumb) {
         const img = document.createElement('img');
+        img.referrerPolicy = 'no-referrer';
         img.src = thumb;
         img.alt = item.name;
         img.loading = 'lazy';
@@ -103,12 +104,14 @@ function openLightbox(items, startIndex) {
             video.controls = true;
             video.autoplay = true;
             video.playsInline = true;
-            video.src = tile.dataset.full;
+            video.referrerPolicy = 'no-referrer';
             video.poster = tile.dataset.preview || '';
+            video.src = tile.dataset.full;
             stage.appendChild(video);
         } else {
             const img = document.createElement('img');
             img.className = 'photo-lightbox-media';
+            img.referrerPolicy = 'no-referrer';
             img.alt = tile.getAttribute('aria-label') || '';
             img.src = tile.dataset.full || tile.dataset.preview;
             stage.appendChild(img);
