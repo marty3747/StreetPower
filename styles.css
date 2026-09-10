@@ -112,6 +112,12 @@ body > * {
     width: 100%;
     justify-content: space-between;
     align-items: center;
+    gap: 2.5rem;
+}
+
+.nav-brand {
+    flex-shrink: 0;
+    margin-right: 0.75rem;
 }
 
 .nav-brand h1 {
