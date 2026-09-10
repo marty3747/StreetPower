@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Фотографии | СИЛА УЛИЦ</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../images/logoSmall.png">
+    <link rel="stylesheet" href="../styles.css?v=20260911d">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="training-detail-page">
+    <div class="header-phantom"></div>
+    <header class="header">
+        <nav class="nav">
+            <div class="container">
+                <div class="nav-brand">
+                    <a href="/" aria-label="На главную"><img class="nav-logo" src="../images/logo.png" alt="СИЛА УЛИЦ"></a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="/training">Тренировки</a></li>
+                    <li><a href="/photos">Фотографии</a></li>
+                    <li><a href="/#about">О турнире</a></li>
+                    <li><a href="/#goals">Цели</a></li>
+                    <li><a href="/#rules">Правила</a></li>
+                    <li><a href="/#registration">Регистрация</a></li>
+                    <li><a href="/#contacts">Контакты</a></li>
+                    <li><a href="/#documents">Документы</a></li>
+                </ul>
+                <div class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main" style="flex: 1;">
+        <section class="section about">
+            <div class="container">
+                <h1 class="section-title">Фотографии</h1>
+                <div class="training-list">
+                    <a href="/photos/1" class="discipline">
+                        <div style="display: flex; flex-direction: column; gap: 5px; width: 100%;">
+                            <span>ТУРНИР СИЛА УЛИЦ #1</span>
+                            <span class="discipline-sub">14 июня 2026 · фото и видео</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-copy">
+                <div class="footer-legal">
+                    <p>&copy; 2026 СИЛА УЛИЦ. Все права защищены.</p>
+                    <p>Наименование: Индивидуальный предприниматель Филиппов Никита Юрьевич</p>
+                    <p>ИНН: 616714476864</p>
+                    <p>ОГРНИП: 326619600096314</p>
+                    <p>Контакты: streetforce.team@mail.ru</p>
+                </div>
+                <div class="footer-socials">
+                    <span class="footer-socials-label">соц сети:</span>
+                    <a class="footer-social" href="https://www.instagram.com/sila.ulic/" target="_blank" rel="noopener noreferrer" aria-label="Instagram СИЛА УЛИЦ">
+                        <i class="fab fa-instagram" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <audio id="bg-audio" src="../images/soundtrack.mp3" type="audio/mpeg" preload="auto" loop></audio>
+    <div id="audio-tooltip" class="audio-tooltip">Включи музыку! <i class="fas fa-arrow-right bx-fade-right"></i></div>
+    <button id="audio-toggle-btn" class="audio-toggle-btn" aria-label="Play/Pause Music">
+        <i class="fas fa-play"></i>
+    </button>
+
+    <script src="../script.js"></script>
+</body>
+</html>
