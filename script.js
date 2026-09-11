@@ -599,6 +599,22 @@ function shouldHandleInternally(anchor, event) {
     return dest;
 }
 
+function freezeResolvedAssets(doc, pageUrl) {
+    const base = doc.createElement('base');
+    base.href = new URL(pageUrl, location.origin).href;
+    doc.head.prepend(base);
+
+    doc.querySelectorAll('[src], [poster]').forEach((el) => {
+        ['src', 'poster'].forEach((attr) => {
+            if (!el.hasAttribute(attr)) return;
+            const raw = el.getAttribute(attr);
+            if (!raw || /^(data:|blob:|javascript:)/i.test(raw)) return;
+            const resolved = el[attr];
+            if (resolved) el.setAttribute(attr, resolved);
+        });
+    });
+}
+
 async function ensurePageScriptsFromList(scripts, pageUrl) {
     for (const script of scripts) {
         const src = script.getAttribute('src');
@@ -633,6 +649,7 @@ async function navigateTo(url, push) {
         const extraScripts = [...next.querySelectorAll('script[src]')];
         next.querySelectorAll('script').forEach((el) => el.remove());
         PERSIST_AUDIO_IDS.forEach((id) => next.getElementById(id)?.remove());
+        freezeResolvedAssets(next, dest.href);
         [...document.body.children].forEach((el) => {
             if (!persist.includes(el)) el.remove();
         });
