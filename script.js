@@ -12,6 +12,51 @@ function closeMobileNav() {
     document.querySelector('.nav-toggle')?.classList.remove('active');
 }
 
+function loadEventMap() {
+    const box = document.querySelector('.map-container[data-src]');
+    if (!box || box.dataset.mapReady === '1') return;
+    const src = box.getAttribute('data-src');
+    if (!src) return;
+
+    box.dataset.mapReady = '1';
+    const x = window.scrollX;
+    const y = window.scrollY;
+    const pin = () => window.scrollTo(x, y);
+
+    const iframe = document.createElement('iframe');
+    iframe.title = 'Яндекс карта — место проведения';
+    iframe.tabIndex = -1;
+    iframe.setAttribute('loading', 'lazy');
+    iframe.addEventListener('load', pin, { once: true });
+    iframe.src = src;
+    box.appendChild(iframe);
+
+    pin();
+    requestAnimationFrame(pin);
+    setTimeout(pin, 50);
+    setTimeout(pin, 250);
+}
+
+function initEventMap() {
+    const box = document.querySelector('.map-container[data-src]');
+    if (!box) return;
+
+    const io = new IntersectionObserver((entries) => {
+        const visible = entries.some((entry) => {
+            if (!entry.isIntersecting) return false;
+            const rect = entry.boundingClientRect;
+            const vh = window.innerHeight || 0;
+            return rect.top < vh + 80 && rect.bottom > -80;
+        });
+        if (!visible) return;
+        loadEventMap();
+        io.disconnect();
+    }, { rootMargin: '80px 0px', threshold: 0.01 });
+
+    io.observe(box);
+    pageCleanups.push(() => io.disconnect());
+}
+
 function scrollToHash(hash) {
     if (!hash || hash === '#') return false;
     const target = document.querySelector(hash);
@@ -152,6 +197,8 @@ function initPage() {
         el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         observer.observe(el);
     });
+
+    initEventMap();
 
     // Partners image fallback
     const partnerImg = document.querySelector('.partner-img');
