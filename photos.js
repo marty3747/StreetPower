@@ -155,6 +155,16 @@ function openLightbox(items, startIndex) {
         media.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
     }
 
+    function updateCursor(kind) {
+        const media = mediaEl();
+        if (!media || media.tagName !== 'IMG') return;
+        if (kind) {
+            media.style.cursor = kind;
+            return;
+        }
+        media.style.cursor = scale > 1 ? 'zoom-out' : 'zoom-in';
+    }
+
     function resetZoom(animate) {
         scale = 1;
         startScale = 1;
@@ -163,8 +173,7 @@ function openLightbox(items, startIndex) {
         lastTX = 0;
         lastTY = 0;
         applyTransform(animate);
-        const media = mediaEl();
-        if (media) media.style.cursor = '';
+        updateCursor();
     }
 
     function clampScale(value) {
@@ -192,7 +201,7 @@ function openLightbox(items, startIndex) {
             return;
         }
         applyTransform(animate);
-        media.style.cursor = 'grab';
+        updateCursor();
     }
 
     function pinchDistance(touches) {
@@ -379,6 +388,7 @@ function openLightbox(items, startIndex) {
                 return;
             }
             applyTransform(true);
+            updateCursor();
             return;
         }
 
@@ -441,32 +451,39 @@ function openLightbox(items, startIndex) {
     function onPointerDown(event) {
         if (event.pointerType === 'touch' || !isImage() || scale <= 1) return;
         if (event.target.closest('button')) return;
-        panning = true;
+        panning = false;
         panStartX = event.clientX;
         panStartY = event.clientY;
-        applyTransform(false);
-        const media = mediaEl();
-        if (media) media.style.cursor = 'grabbing';
-        if (overlay.setPointerCapture) overlay.setPointerCapture(event.pointerId);
+        overlay.dataset.pendingPan = '1';
     }
 
     function onPointerMove(event) {
-        if (event.pointerType === 'touch' || !panning || scale <= 1) return;
+        if (event.pointerType === 'touch' || scale <= 1) return;
+        if (overlay.dataset.pendingPan !== '1' && !panning) return;
         const dx = event.clientX - panStartX;
         const dy = event.clientY - panStartY;
-        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) didSwipe = true;
+        if (!panning) {
+            if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+            panning = true;
+            delete overlay.dataset.pendingPan;
+            didSwipe = true;
+            updateCursor('grabbing');
+            if (overlay.setPointerCapture) overlay.setPointerCapture(event.pointerId);
+        }
         translateX = lastTX + dx;
         translateY = lastTY + dy;
         applyTransform(false);
     }
 
     function onPointerUp(event) {
-        if (event.pointerType === 'touch' || !panning) return;
-        panning = false;
-        lastTX = translateX;
-        lastTY = translateY;
-        const media = mediaEl();
-        if (media) media.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
+        if (event.pointerType === 'touch') return;
+        delete overlay.dataset.pendingPan;
+        if (panning) {
+            panning = false;
+            lastTX = translateX;
+            lastTY = translateY;
+        }
+        updateCursor();
     }
 
     function close() {
