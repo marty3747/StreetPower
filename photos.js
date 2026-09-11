@@ -442,7 +442,6 @@ function openLightbox(items, startIndex) {
         if (event.pointerType === 'touch' || !isImage() || scale <= 1) return;
         if (event.target.closest('button')) return;
         panning = true;
-        didSwipe = true;
         panStartX = event.clientX;
         panStartY = event.clientY;
         applyTransform(false);
@@ -453,8 +452,11 @@ function openLightbox(items, startIndex) {
 
     function onPointerMove(event) {
         if (event.pointerType === 'touch' || !panning || scale <= 1) return;
-        translateX = lastTX + (event.clientX - panStartX);
-        translateY = lastTY + (event.clientY - panStartY);
+        const dx = event.clientX - panStartX;
+        const dy = event.clientY - panStartY;
+        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) didSwipe = true;
+        translateX = lastTX + dx;
+        translateY = lastTY + dy;
         applyTransform(false);
     }
 
@@ -465,13 +467,6 @@ function openLightbox(items, startIndex) {
         lastTY = translateY;
         const media = mediaEl();
         if (media) media.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
-    }
-
-    function onDoubleClick(event) {
-        if (!isImage() || event.target.closest('button')) return;
-        event.preventDefault();
-        if (scale > 1) resetZoom(true);
-        else zoomAt(2.2, event.clientX, event.clientY, true);
     }
 
     function close() {
@@ -495,7 +490,6 @@ function openLightbox(items, startIndex) {
         overlay.removeEventListener('pointermove', onPointerMove);
         overlay.removeEventListener('pointerup', onPointerUp);
         overlay.removeEventListener('pointercancel', onPointerUp);
-        overlay.removeEventListener('dblclick', onDoubleClick);
     }
 
     function onKey(event) {
@@ -522,7 +516,6 @@ function openLightbox(items, startIndex) {
     overlay.addEventListener('pointermove', onPointerMove);
     overlay.addEventListener('pointerup', onPointerUp);
     overlay.addEventListener('pointercancel', onPointerUp);
-    overlay.addEventListener('dblclick', onDoubleClick);
     closeBtn.onclick = close;
     prevBtn.onclick = () => show(index - 1);
     nextBtn.onclick = () => show(index + 1);
@@ -531,7 +524,13 @@ function openLightbox(items, startIndex) {
             didSwipe = false;
             return;
         }
-        if (event.target === overlay) close();
+        if (event.target === overlay) {
+            close();
+            return;
+        }
+        if (!isImage() || event.target.closest('button') || event.target.closest('video')) return;
+        if (scale > 1) resetZoom(true);
+        else zoomAt(2.2, event.clientX, event.clientY, true);
     };
 }
 
