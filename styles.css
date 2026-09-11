@@ -909,11 +909,17 @@ body > * {
 }
 
 /* Partners Section */
+#partners {
+    overflow-x: clip;
+}
+
 .partners-content {
-    margin: auto;
-    width: min-content;
+    margin-inline: auto;
+    width: min(100%, max-content);
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 300px));
+    justify-content: center;
+    justify-items: center;
     gap: 2rem;
     text-align: center;
 }
@@ -929,15 +935,21 @@ body > * {
 }
 
 .partner-logo {
-    width: 300px;
-    display: inline-block;
+    width: 100%;
+    max-width: 300px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
     background: var(--panel);
     border-radius: var(--radius);
     padding: 1rem;
     margin: 0;
     border: var(--stroke) solid var(--line);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    max-width: 300px;
     box-shadow: var(--shadow) var(--shadow) 0 rgba(0,0,0,0.65);
 }
 
@@ -952,12 +964,27 @@ body > * {
 }
 
 .partner-img {
-    width: 100%;
-    height: auto;
-    max-width: 250px;
     display: block;
+    width: 180px;
+    height: 180px;
+    max-width: 100%;
+    margin: 0 auto;
     object-fit: contain;
-    border-radius: var(--radius);
+    object-position: center;
+    flex-shrink: 0;
+}
+
+.partner-name {
+    font-size: 24px;
+    width: 100%;
+    text-align: center;
+}
+
+.partner-desc {
+    font-size: 14px;
+    color: gray;
+    width: 100%;
+    text-align: center;
 }
 
 .partner-placeholder i {
@@ -1743,7 +1770,21 @@ body > * {
     }
 
     .partners-content {
-        margin: auto;
+        width: 100%;
+        max-width: 100%;
+        margin-inline: auto;
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+    }
+
+    .partner-logo {
+        width: 100%;
+        max-width: min(300px, 100%);
+    }
+
+    .partner-img {
+        width: 150px;
+        height: 150px;
     }
 
     .kings-table thead {
@@ -1848,8 +1889,13 @@ body > * {
     }
 
     .partner-logo {
-        /* max-width: 200px; */
         padding: 0.75rem;
+        max-width: 100%;
+    }
+
+    .partner-img {
+        width: 140px;
+        height: 140px;
     }
 }
 
