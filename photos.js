@@ -113,6 +113,31 @@ function openLightbox(items, startIndex) {
     const closeBtn = document.getElementById('photoLightboxClose');
     const prevBtn = document.getElementById('photoLightboxPrev');
     const nextBtn = document.getElementById('photoLightboxNext');
+    const previousOverflow = document.body.style.overflow;
+
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
+    let axis = null;
+    let didSwipe = false;
+
+    function mediaEl() {
+        return stage.querySelector('.photo-lightbox-media');
+    }
+
+    function setOffset(dx) {
+        const media = mediaEl();
+        if (!media) return;
+        media.style.transition = 'none';
+        media.style.transform = `translateX(${dx}px)`;
+    }
+
+    function resetOffset(animate) {
+        const media = mediaEl();
+        if (!media) return;
+        media.style.transition = animate ? 'transform 0.2s ease' : 'none';
+        media.style.transform = '';
+    }
 
     function show(nextIndex) {
         index = (nextIndex + visible.length) % visible.length;
@@ -132,10 +157,57 @@ function openLightbox(items, startIndex) {
             const img = document.createElement('img');
             img.className = 'photo-lightbox-media';
             img.referrerPolicy = 'no-referrer';
+            img.draggable = false;
             img.alt = tile.getAttribute('aria-label') || '';
             img.src = tile.dataset.full || tile.dataset.preview;
             stage.appendChild(img);
         }
+    }
+
+    function onTouchStart(event) {
+        if (event.touches.length !== 1) return;
+        if (event.target.closest('button')) return;
+        tracking = true;
+        axis = null;
+        didSwipe = false;
+        startX = event.touches[0].clientX;
+        startY = event.touches[0].clientY;
+    }
+
+    function onTouchMove(event) {
+        if (!tracking) return;
+        const dx = event.touches[0].clientX - startX;
+        const dy = event.touches[0].clientY - startY;
+        if (!axis) {
+            if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+            axis = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+        }
+        if (axis !== 'h') return;
+        event.preventDefault();
+        didSwipe = Math.abs(dx) > 12;
+        setOffset(dx);
+    }
+
+    function onTouchEnd(event) {
+        if (!tracking) return;
+        tracking = false;
+        const touch = event.changedTouches && event.changedTouches[0];
+        if (!touch) {
+            axis = null;
+            resetOffset(true);
+            return;
+        }
+        const dx = touch.clientX - startX;
+        const dy = touch.clientY - startY;
+        const horizontal = axis === 'h';
+        axis = null;
+        if (horizontal && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+            didSwipe = true;
+            resetOffset(false);
+            show(dx < 0 ? index + 1 : index - 1);
+            return;
+        }
+        resetOffset(true);
     }
 
     function close() {
@@ -144,7 +216,12 @@ function openLightbox(items, startIndex) {
         stage.replaceChildren();
         overlay.classList.remove('active');
         overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = previousOverflow;
         document.removeEventListener('keydown', onKey);
+        overlay.removeEventListener('touchstart', onTouchStart);
+        overlay.removeEventListener('touchmove', onTouchMove);
+        overlay.removeEventListener('touchend', onTouchEnd);
+        overlay.removeEventListener('touchcancel', onTouchEnd);
     }
 
     function onKey(event) {
@@ -155,12 +232,21 @@ function openLightbox(items, startIndex) {
 
     overlay.classList.add('active');
     overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
     show(index);
     document.addEventListener('keydown', onKey);
+    overlay.addEventListener('touchstart', onTouchStart, { passive: true });
+    overlay.addEventListener('touchmove', onTouchMove, { passive: false });
+    overlay.addEventListener('touchend', onTouchEnd);
+    overlay.addEventListener('touchcancel', onTouchEnd);
     closeBtn.onclick = close;
     prevBtn.onclick = () => show(index - 1);
     nextBtn.onclick = () => show(index + 1);
     overlay.onclick = (event) => {
+        if (didSwipe) {
+            didSwipe = false;
+            return;
+        }
         if (event.target === overlay) close();
     };
 }
