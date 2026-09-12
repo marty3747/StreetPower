@@ -69,6 +69,32 @@ function scrollToHash(hash) {
     return true;
 }
 
+function scrollRegistrationSuccessIntoView() {
+    const block = document.getElementById('registration-telegram-block');
+    const button = document.getElementById('registration-telegram-cta');
+    if (!block || !button) return;
+
+    const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
+    const pad = 16;
+
+    const run = () => {
+        document.activeElement?.blur?.();
+        const blockTop = block.getBoundingClientRect().top + window.pageYOffset;
+        const buttonBottom = button.getBoundingClientRect().bottom + window.pageYOffset;
+        const viewport = window.innerHeight || 0;
+        let top = blockTop - headerHeight - pad;
+        const visibleBottom = top + viewport;
+        if (buttonBottom + pad > visibleBottom) {
+            top = buttonBottom + pad - viewport;
+        }
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    };
+
+    requestAnimationFrame(() => requestAnimationFrame(run));
+    setTimeout(run, 280);
+    setTimeout(run, 700);
+}
+
 function initPage() {
     cleanupPage();
 
@@ -149,18 +175,11 @@ function initPage() {
                 // При использовании no-cors мы не можем прочитать ответ
                 // Но если запрос выполнился без ошибки, считаем успешным
                 document.getElementById('registration-title').style.display = 'none';
+                const subtitle = document.getElementById('registration-subtitle');
+                if (subtitle) subtitle.style.display = 'none';
                 document.getElementById('registration-form').style.display = 'none';
                 document.getElementById('registration-success').style.display = 'block';
-
-                // Скролл к секции регистрации после успеха
-                const regSection = document.getElementById('registration');
-                if (regSection) {
-                    const headerHeight = document.querySelector('.header') ? document.querySelector('.header').offsetHeight : 0;
-                    window.scrollTo({
-                        top: regSection.offsetTop - headerHeight,
-                        behavior: 'smooth'
-                    });
-                }
+                scrollRegistrationSuccessIntoView();
 
             } catch (error) {
                 alert('Произошла ошибка при отправке формы. Проверьте подключение к интернету и попробуйте еще раз.');

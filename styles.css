@@ -41,6 +41,10 @@ body {
     max-width: 100%;
 }
 
+#registration-telegram-block {
+    scroll-margin-top: 96px;
+}
+
 .registration-form a {
     color: rgba(233,233,227,0.9);
     text-underline-offset: 3px;
