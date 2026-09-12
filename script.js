@@ -69,6 +69,24 @@ function scrollToHash(hash) {
     return true;
 }
 
+function sendRegistration(url) {
+    return fetch(url, { method: 'GET', mode: 'no-cors', cache: 'no-store', credentials: 'omit' }).catch(() => (
+        new Promise((resolve) => {
+            const frame = document.createElement('iframe');
+            frame.style.cssText = 'position:absolute;width:0;height:0;border:0;visibility:hidden';
+            frame.src = url;
+            const done = () => {
+                frame.remove();
+                resolve();
+            };
+            frame.onload = done;
+            frame.onerror = done;
+            document.body.appendChild(frame);
+            setTimeout(done, 2500);
+        })
+    ));
+}
+
 function scrollRegistrationSuccessIntoView() {
     const block = document.getElementById('registration-telegram-block');
     const button = document.getElementById('registration-telegram-cta');
@@ -167,10 +185,7 @@ function initPage() {
                     telegram: telegram
                 });
 
-                const response = await fetch(`https://script.google.com/macros/s/AKfycbxfIh2RT08CpjQF9bygcVwqWm-ShLERB9PYSDI03mB-vLJvvNkf8Cg45KwalkgpZ7ZE/exec?${params}`, {
-                    method: 'GET',
-                    mode: 'no-cors'
-                });
+                await sendRegistration(`https://script.google.com/macros/s/AKfycbxfIh2RT08CpjQF9bygcVwqWm-ShLERB9PYSDI03mB-vLJvvNkf8Cg45KwalkgpZ7ZE/exec?${params}`);
 
                 // При использовании no-cors мы не можем прочитать ответ
                 // Но если запрос выполнился без ошибки, считаем успешным
